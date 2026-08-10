@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,19 +13,23 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #ffffff;
-            color: #173b2a;
+            color: #222;
         }
 
         /* =========================
-           NAVIGATION BAR
+           HEADER
         ========================= */
 
         header {
             background: #ffffff;
-            border-bottom: 3px solid #0b6b3a;
+            border-bottom: 4px solid #0b6b3a;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -35,11 +38,12 @@
         nav {
             max-width: 1200px;
             margin: auto;
-            height: 85px;
+            min-height: 90px;
+            padding: 10px 25px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 25px;
         }
 
         /* =========================
@@ -52,170 +56,153 @@
             gap: 12px;
         }
 
-        .logo-icon {
-            width: 55px;
-            height: 55px;
-            background: #0b6b3a;
+        .logo img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 27px;
-            border: 4px solid #e3262e;
         }
 
         .logo-text h1 {
-            font-size: 21px;
-            color: #0b6b3a;
-            line-height: 1;
+            color: #08783e;
+            font-size: 22px;
         }
 
         .logo-text span {
+            color: #e51c23;
             font-size: 12px;
-            color: #e3262e;
             font-weight: bold;
             letter-spacing: 2px;
         }
 
         /* =========================
-           MENU LINKS
+           NAVIGATION
         ========================= */
 
-        nav ul {
+        .nav-links {
             display: flex;
-            list-style: none;
+            align-items: center;
             gap: 30px;
+            list-style: none;
         }
 
-        nav ul li a {
+        .nav-links a {
             text-decoration: none;
             color: #173b2a;
             font-weight: bold;
             transition: 0.3s;
         }
 
-        nav ul li a:hover {
-            color: #e3262e;
+        .nav-links a:hover {
+            color: #e51c23;
         }
 
-        .nav-button {
-            background: #e3262e;
+        .menu-btn {
+            background: #e51c23;
             color: white !important;
-            padding: 12px 20px;
+            padding: 12px 22px;
             border-radius: 6px;
         }
 
-        .nav-button:hover {
-            background: #b91c23;
+        /* =========================
+           MOBILE BUTTON
+        ========================= */
+
+        .mobile-button {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #08783e;
         }
 
         /* =========================
-           HERO SECTION
+           HERO
         ========================= */
 
         .hero {
-            min-height: 600px;
+            min-height: 650px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             text-align: center;
+            color: white;
 
             background:
                 linear-gradient(
-                    rgba(0, 60, 30, 0.78),
-                    rgba(0, 60, 30, 0.78)
+                    rgba(0, 50, 25, 0.78),
+                    rgba(0, 50, 25, 0.78)
                 ),
-                url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1600&q=80");
+                url("logo.jpg");
 
             background-size: cover;
             background-position: center;
-            color: white;
-            padding: 40px 20px;
         }
 
         .hero-content {
             max-width: 850px;
-        }
-
-        .hero-logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px;
-
-            background: white;
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #0b6b3a;
-            font-size: 48px;
-
-            border: 7px solid #e3262e;
+            padding: 30px;
         }
 
         .hero h2 {
-            font-size: clamp(40px, 7vw, 72px);
-            margin-bottom: 15px;
-            font-weight: 800;
+            font-size: clamp(42px, 7vw, 75px);
+            margin-bottom: 20px;
         }
 
         .hero h2 span {
-            color: #e3262e;
+            color: #ff2525;
         }
 
         .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
+            font-size: 21px;
             line-height: 1.6;
+            margin-bottom: 35px;
         }
 
-        .menu-button {
+        .hero-button {
             display: inline-block;
-            background: #e3262e;
+            background: #e51c23;
             color: white;
             padding: 16px 35px;
+
             text-decoration: none;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 6px;
+
+            border-radius: 7px;
+
             transition: 0.3s;
         }
 
-        .menu-button:hover {
+        .hero-button:hover {
             background: white;
-            color: #0b6b3a;
-            transform: translateY(-3px);
+            color: #08783e;
         }
 
         /* =========================
-           WELCOME SECTION
+           ABOUT
         ========================= */
 
-        .welcome {
-            padding: 80px 20px;
+        .about {
+            padding: 90px 20px;
             text-align: center;
-            max-width: 1100px;
-            margin: auto;
         }
 
         .section-title {
-            color: #0b6b3a;
-            font-size: 38px;
+            color: #08783e;
+            font-size: 40px;
             margin-bottom: 15px;
         }
 
         .red-line {
             width: 70px;
             height: 5px;
-            background: #e3262e;
+            background: #e51c23;
             margin: 0 auto 25px;
-            border-radius: 5px;
         }
 
-        .welcome p {
+        .about p {
             max-width: 750px;
             margin: auto;
             font-size: 18px;
@@ -224,12 +211,12 @@
         }
 
         /* =========================
-           FEATURE CARDS
+           FEATURES
         ========================= */
 
         .features {
-            background: #f3f8f5;
-            padding: 70px 20px;
+            background: #f2f8f4;
+            padding: 80px 20px;
         }
 
         .feature-container {
@@ -241,28 +228,29 @@
             gap: 25px;
         }
 
-        .card {
+        .feature-card {
             background: white;
             padding: 35px 25px;
             text-align: center;
+
             border-radius: 10px;
 
-            border-top: 5px solid #0b6b3a;
+            border-top: 5px solid #08783e;
 
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        .card-icon {
+        .feature-icon {
             font-size: 45px;
             margin-bottom: 15px;
         }
 
-        .card h3 {
-            color: #0b6b3a;
+        .feature-card h3 {
+            color: #08783e;
             margin-bottom: 12px;
         }
 
-        .card p {
+        .feature-card p {
             color: #666;
             line-height: 1.6;
         }
@@ -272,41 +260,55 @@
         ========================= */
 
         .menu-preview {
-            padding: 80px 20px;
+            padding: 90px 20px;
             text-align: center;
         }
 
-        .menu-items {
-            max-width: 900px;
-            margin: 40px auto;
-
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+        .menu-preview p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 18px;
         }
 
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .view-menu {
+            display: inline-block;
 
-            padding: 20px;
+            background: #08783e;
+            color: white;
 
-            border: 1px solid #ddd;
-            border-left: 5px solid #0b6b3a;
+            padding: 15px 35px;
+
+            text-decoration: none;
+            font-weight: bold;
 
             border-radius: 7px;
-            background: white;
+
+            transition: 0.3s;
         }
 
-        .menu-item h3 {
-            color: #173b2a;
+        .view-menu:hover {
+            background: #e51c23;
         }
 
-        .price {
-            color: #e3262e;
-            font-weight: bold;
-            font-size: 18px;
+        /* =========================
+           CONTACT
+        ========================= */
+
+        .contact {
+            background: #08783e;
+            color: white;
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .contact h2 {
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+
+        .contact p {
+            margin: 10px;
+            font-size: 17px;
         }
 
         /* =========================
@@ -314,23 +316,14 @@
         ========================= */
 
         footer {
-            background: #0b6b3a;
+            background: #062f1b;
             color: white;
             text-align: center;
-            padding: 40px 20px;
+            padding: 25px;
         }
 
-        footer h2 {
-            margin-bottom: 10px;
-        }
-
-        footer p {
-            margin: 8px;
-        }
-
-        .footer-red {
-            color: #e3262e;
-            font-weight: bold;
+        footer span {
+            color: #e51c23;
         }
 
         /* =========================
@@ -339,17 +332,43 @@
 
         @media (max-width: 768px) {
 
-            nav {
-                height: auto;
-                padding: 15px;
+            .nav-links {
+                display: none;
+                position: absolute;
+
+                top: 90px;
+                left: 0;
+
+                width: 100%;
+
+                background: white;
+
+                flex-direction: column;
+                gap: 0;
+
+                border-bottom: 3px solid #08783e;
             }
 
-            nav ul {
-                display: none;
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 17px;
+            }
+
+            .mobile-button {
+                display: block;
             }
 
             .hero {
-                min-height: 550px;
+                min-height: 580px;
             }
 
             .hero h2 {
@@ -364,12 +383,13 @@
                 grid-template-columns: 1fr;
             }
 
-            .menu-items {
-                grid-template-columns: 1fr;
-            }
-
             .logo-text h1 {
                 font-size: 17px;
+            }
+
+            .logo img {
+                width: 55px;
+                height: 55px;
             }
         }
     </style>
@@ -377,214 +397,224 @@
 
 <body>
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+    <!-- HEADER -->
 
-<header>
+    <header>
 
-    <nav>
+        <nav>
 
-        <div class="logo">
+            <div class="logo">
 
-            <div class="logo-icon">
-                🔥
+                <img src="logo.jpg" alt="Mamakanana's Shisanyama Logo">
+
+                <div class="logo-text">
+                    <h1>Mamakanana's</h1>
+                    <span>SHISANYAMA</span>
+                </div>
+
             </div>
 
-            <div class="logo-text">
-                <h1>Mamakanana's</h1>
-                <span>SHISANYAMA</span>
+            <div class="mobile-button" id="mobileButton">
+                ☰
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="menu.html">Menu</a>
+                </li>
+
+                <li>
+                    <a href="#about">About Us</a>
+                </li>
+
+                <li>
+                    <a href="#contact">Contact</a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h2>
+                Welcome to
+                <span>Mamakanana's</span>
+                Shisanyama
+            </h2>
+
+            <p>
+                Authentic South African flavour,
+                freshly grilled and served with love.
+            </p>
+
+            <a href="menu.html" class="hero-button">
+                VIEW OUR MENU
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+
+    <section class="about" id="about">
+
+        <h2 class="section-title">
+            Welcome to Mamakanana's
+        </h2>
+
+        <div class="red-line"></div>
+
+        <p>
+            At Mamakanana's Shisanyama, we believe that
+            good food brings people together. Enjoy freshly
+            grilled meat, delicious sides and a true South
+            African shisanyama experience.
+        </p>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+        <div class="feature-container">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🥩
+                </div>
+
+                <h3>
+                    Freshly Grilled
+                </h3>
+
+                <p>
+                    Enjoy freshly prepared meat grilled
+                    to perfection.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🍽️
+                </div>
+
+                <h3>
+                    Delicious Food
+                </h3>
+
+                <p>
+                    Tasty meals and traditional sides
+                    prepared with care.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ❤️
+                </div>
+
+                <h3>
+                    Made With Love
+                </h3>
+
+                <p>
+                    Great food, great company and a
+                    welcoming atmosphere.
+                </p>
+
             </div>
 
         </div>
 
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#menu">Menu</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact" class="nav-button">Contact Us</a></li>
-        </ul>
-
-    </nav>
-
-</header>
+    </section>
 
 
-<!-- =========================
-     HERO
-========================= -->
+    <!-- MENU PREVIEW -->
 
-<section class="hero">
+    <section class="menu-preview">
 
-    <div class="hero-content">
+        <h2 class="section-title">
+            Hungry?
+        </h2>
 
-        <div class="hero-logo">
-            🔥
-        </div>
+        <div class="red-line"></div>
+
+        <p>
+            Explore our delicious selection of freshly
+            prepared meals.
+        </p>
+
+        <a href="menu.html" class="view-menu">
+            VIEW FULL MENU
+        </a>
+
+    </section>
+
+
+    <!-- CONTACT -->
+
+    <section class="contact" id="contact">
 
         <h2>
-            Mamakanana's
-            <span>Shisanyama</span>
+            Come Visit Us
         </h2>
 
         <p>
-            Authentic South African flavour,
-            freshly grilled and served with love.
+            📍 Your Business Address
         </p>
 
-        <a href="#menu" class="menu-button">
-            VIEW OUR MENU
-        </a>
+        <p>
+            📞 Your Phone Number
+        </p>
 
-    </div>
+        <p>
+            💬 WhatsApp Available
+        </p>
 
-</section>
-
-
-<!-- =========================
-     WELCOME
-========================= -->
-
-<section class="welcome" id="about">
-
-    <h2 class="section-title">
-        Welcome to Mamakanana's
-    </h2>
-
-    <div class="red-line"></div>
-
-    <p>
-        At Mamakanana's Shisanyama, we believe that good food
-        brings people together. Enjoy delicious, freshly grilled
-        meat, tasty sides and an unforgettable South African
-        dining experience.
-    </p>
-
-</section>
+    </section>
 
 
-<!-- =========================
-     FEATURES
-========================= -->
+    <!-- FOOTER -->
 
-<section class="features">
+    <footer>
 
-    <div class="feature-container">
+        <p>
+            © 2026 Mamakanana's Shisanyama.
+            All Rights Reserved.
+        </p>
 
-        <div class="card">
+        <p>
+            <span>Good Food</span>
+            • Great Company • Authentic Flavour
+        </p>
 
-            <div class="card-icon">🥩</div>
+    </footer>
 
-            <h3>Freshly Grilled</h3>
-
-            <p>
-                Our meat is prepared fresh and grilled
-                to give you that authentic shisanyama taste.
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-icon">🍽️</div>
-
-            <h3>Delicious Food</h3>
-
-            <p>
-                Enjoy tasty meals and traditional sides
-                prepared with care.
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-icon">❤️</div>
-
-            <h3>Made With Love</h3>
-
-            <p>
-                Great food, great people and a welcoming
-                atmosphere for everyone.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     MENU PREVIEW
-========================= -->
-
-<section class="menu-preview" id="menu">
-
-    <h2 class="section-title">
-        Popular Choices
-    </h2>
-
-    <div class="red-line"></div>
-
-    <div class="menu-items">
-
-        <div class="menu-item">
-            <h3>Beef</h3>
-            <span class="price">R___</span>
-        </div>
-
-        <div class="menu-item">
-            <h3>Chicken</h3>
-            <span class="price">R___</span>
-        </div>
-
-        <div class="menu-item">
-            <h3>Boerewors</h3>
-            <span class="price">R___</span>
-        </div>
-
-        <div class="menu-item">
-            <h3>Steak</h3>
-            <span class="price">R___</span>
-        </div>
-
-    </div>
-
-    <a href="#" class="menu-button">
-        VIEW FULL MENU
-    </a>
-
-</section>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer id="contact">
-
-    <h2>Mamakanana's Shisanyama</h2>
-
-    <p>Good Food • Great Company • Authentic Flavour</p>
-
-    <p>📍 [Add Business Address]</p>
-
-    <p>📞 [Add Phone Number]</p>
-
-    <p class="footer-red">
-        Come hungry. Leave happy.
-    </p>
-
-    <br>
-
-    <p>
-        © 2026 Mamakanana's Shisanyama. All Rights Reserved.
-    </p>
-
-</footer>
+    <script src="script.js"></script>
 
 </body>
 </html>
