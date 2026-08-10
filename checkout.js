@@ -1,65 +1,49 @@
 // =====================================================
 // MAMAKANANA'S SHISANYAMA
-// CHECKOUT.JS
+// SECURE CHECKOUT
 // =====================================================
 
 
 // =====================================================
-// SUPABASE CONFIGURATION
+// SUPABASE
 // =====================================================
 
-const SUPABASE_URL =
-    "https://fzydikkscegqecdepxyl.supabase.co";
+const SUPABASE_URL = "https://fzydikkscegqecdepxyl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_33Vwwv5EjoY41AyBW4a4kQ_dLXYm5LW";
 
-const SUPABASE_KEY =
-    "sb_publishable_33Vwwv5EjoY41AyBW4a4kQ_dLXYm5LW";
+const { createClient } = window.supabase;
 
-
-const { createClient } =
-    window.supabase;
-
-const db =
-    createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 // =====================================================
-// GET CART
+// CART
 // =====================================================
 
 let cart =
     JSON.parse(
-        localStorage.getItem(
-            "mamakananasCart"
-        )
+        localStorage.getItem("mamakananasCart")
     ) || [];
 
 
 // =====================================================
-// PAGE ELEMENTS
+// ELEMENTS
 // =====================================================
 
 const checkoutForm =
-    document.getElementById(
-        "checkoutForm"
-    );
+    document.getElementById("checkoutForm");
 
 const orderItemsContainer =
-    document.getElementById(
-        "orderItems"
-    );
+    document.getElementById("orderItems");
 
 const orderTotalElement =
-    document.getElementById(
-        "orderTotal"
-    );
+    document.getElementById("orderTotal");
 
 const orderType =
-    document.getElementById(
-        "orderType"
-    );
+    document.getElementById("orderType");
 
 const deliveryAddressContainer =
     document.getElementById(
@@ -67,24 +51,16 @@ const deliveryAddressContainer =
     );
 
 const deliveryAddress =
-    document.getElementById(
-        "deliveryAddress"
-    );
+    document.getElementById("deliveryAddress");
 
 const placeOrderButton =
-    document.getElementById(
-        "placeOrderButton"
-    );
+    document.getElementById("placeOrderButton");
 
 const checkoutPage =
-    document.getElementById(
-        "checkoutPage"
-    );
+    document.getElementById("checkoutPage");
 
 const confirmation =
-    document.getElementById(
-        "confirmation"
-    );
+    document.getElementById("confirmation");
 
 const confirmedOrderNumber =
     document.getElementById(
@@ -93,7 +69,7 @@ const confirmedOrderNumber =
 
 
 // =====================================================
-// CHECK IF CART IS EMPTY
+// CHECK CART
 // =====================================================
 
 if (cart.length === 0) {
@@ -102,9 +78,7 @@ if (cart.length === 0) {
 
         <div class="empty">
 
-            <h2>
-                Your cart is empty
-            </h2>
+            <h2>Your cart is empty</h2>
 
             <p>
                 Please add some delicious food
@@ -127,7 +101,7 @@ if (cart.length === 0) {
 
 
 // =====================================================
-// DISPLAY ORDER
+// DISPLAY CART
 // =====================================================
 
 function renderOrder() {
@@ -139,10 +113,14 @@ function renderOrder() {
 
     cart.forEach(function(item) {
 
-        const itemTotal =
-            Number(item.price) *
+        const price =
+            Number(item.price);
+
+        const quantity =
             Number(item.quantity);
 
+        const itemTotal =
+            price * quantity;
 
         total += itemTotal;
 
@@ -163,16 +141,13 @@ function renderOrder() {
                 </div>
 
                 <div class="item-quantity">
-                    Quantity: ${item.quantity}
+                    Quantity: ${quantity}
                 </div>
 
             </div>
 
-
             <div class="item-price">
-
                 R${itemTotal.toFixed(2)}
-
             </div>
 
         `;
@@ -187,7 +162,6 @@ function renderOrder() {
 
     orderTotalElement.textContent =
         "R" + total.toFixed(2);
-
 }
 
 
@@ -199,26 +173,21 @@ orderType.addEventListener(
     "change",
     function() {
 
-        if (
-            orderType.value === "delivery"
-        ) {
+        if (orderType.value === "delivery") {
 
             deliveryAddressContainer
                 .classList.add("show");
 
-            deliveryAddress.required =
-                true;
+            deliveryAddress.required = true;
 
         } else {
 
             deliveryAddressContainer
                 .classList.remove("show");
 
-            deliveryAddress.required =
-                false;
+            deliveryAddress.required = false;
 
-            deliveryAddress.value =
-                "";
+            deliveryAddress.value = "";
 
         }
 
@@ -244,14 +213,12 @@ checkoutForm.addEventListener(
             );
 
             return;
-
         }
 
 
-        // Prevent double-click orders
+        // Prevent double submission
 
-        placeOrderButton.disabled =
-            true;
+        placeOrderButton.disabled = true;
 
         placeOrderButton.textContent =
             "PLACING ORDER...";
@@ -260,32 +227,26 @@ checkoutForm.addEventListener(
         try {
 
             // =========================================
-            // CUSTOMER INFORMATION
+            // CUSTOMER DETAILS
             // =========================================
 
             const customerName =
                 document
-                    .getElementById(
-                        "customerName"
-                    )
+                    .getElementById("customerName")
                     .value
                     .trim();
 
 
             const customerPhone =
                 document
-                    .getElementById(
-                        "customerPhone"
-                    )
+                    .getElementById("customerPhone")
                     .value
                     .trim();
 
 
             const customerEmail =
                 document
-                    .getElementById(
-                        "customerEmail"
-                    )
+                    .getElementById("customerEmail")
                     .value
                     .trim();
 
@@ -295,96 +256,93 @@ checkoutForm.addEventListener(
 
 
             const selectedAddress =
-                deliveryAddress
-                    .value
-                    .trim();
+                deliveryAddress.value.trim();
 
 
             const notes =
                 document
-                    .getElementById(
-                        "notes"
-                    )
+                    .getElementById("notes")
                     .value
                     .trim();
 
 
             // =========================================
-            // CALCULATE TOTAL
+            // PREPARE ITEMS
+            // =========================================
+            //
+            // IMPORTANT:
+            // We only send the menu item ID
+            // and quantity.
+            //
+            // We DO NOT trust the browser's price.
+            //
+            // Supabase will get the real price
+            // from menu_items.
             // =========================================
 
-            let total = 0;
+            const itemsForDatabase =
+                cart.map(function(item) {
 
+                    return {
 
-            cart.forEach(function(item) {
+                        menu_item_id:
+                            item.id,
 
-                total +=
-                    Number(item.price) *
-                    Number(item.quantity);
+                        quantity:
+                            Number(item.quantity)
 
-            });
+                    };
+
+                });
 
 
             // =========================================
-            // CREATE ORDER
+            // CALL SECURE SUPABASE FUNCTION
             // =========================================
 
             const {
-                data: order,
+                data: orderNumber,
                 error: orderError
-            } = await db
+            } = await db.rpc(
+                "create_customer_order",
+                {
 
-                .from("orders")
-
-                .insert({
-
-                    customer_name:
+                    p_customer_name:
                         customerName,
 
-                    customer_phone:
+                    p_customer_phone:
                         customerPhone,
 
-                    customer_email:
-                        customerEmail,
+                    p_customer_email:
+                        customerEmail || null,
 
-                    order_type:
+                    p_order_type:
                         selectedOrderType,
 
-                    delivery_address:
+                    p_delivery_address:
                         selectedOrderType ===
                         "delivery"
                             ? selectedAddress
                             : null,
 
-                    notes:
+                    p_notes:
                         notes || null,
 
-                    total_amount:
-                        total,
+                    p_items:
+                        itemsForDatabase
 
-                    status:
-                        "new",
-
-                    payment_status:
-                        "unpaid"
-
-                })
-
-                .select(
-                    "id, order_number"
-                )
-
-                .single();
+                }
+            );
 
 
             // =========================================
-            // CHECK ORDER ERROR
+            // SUPABASE ERROR
             // =========================================
 
             if (orderError) {
 
                 console.error(
-                    "Order error:",
+                    "Order creation error:",
                     orderError
                 );
 
@@ -393,84 +351,22 @@ checkoutForm.addEventListener(
             }
 
 
-            console.log(
-                "Order created:",
-                order
-            );
-
-
             // =========================================
-            // CREATE ORDER ITEMS
+            // CHECK RESPONSE
             // =========================================
 
-            const orderItems =
-                cart.map(function(item) {
+            if (!orderNumber) {
 
-                    return {
-
-                        order_id:
-                            order.id,
-
-                        menu_item_id:
-                            item.id,
-
-                        item_name:
-                            item.name,
-
-                        quantity:
-                            Number(item.quantity),
-
-                        unit_price:
-                            Number(item.price)
-
-                    };
-
-                });
-
-
-            const {
-                error: itemsError
-            } = await db
-
-                .from("order_items")
-
-                .insert(
-                    orderItems
+                throw new Error(
+                    "No order number was returned."
                 );
-
-
-            // =========================================
-            // CHECK ITEMS ERROR
-            // =========================================
-
-            if (itemsError) {
-
-                console.error(
-                    "Order items error:",
-                    itemsError
-                );
-
-
-                /*
-                 * The order itself was created,
-                 * but the items failed.
-                 *
-                 * We do NOT show a fake success
-                 * message to the customer.
-                 */
-
-                throw itemsError;
 
             }
 
 
-            // =========================================
-            // SUCCESS
-            // =========================================
-
             console.log(
                 "Order successfully created:",
-                order.order_number
+                orderNumber
             );
 
 
@@ -490,12 +386,16 @@ checkoutForm.addEventListener(
             // =========================================
 
             confirmedOrderNumber.textContent =
-                "#" + order.order_number;
+                "#" + orderNumber;
 
+
+            // Hide checkout
 
             checkoutPage.style.display =
                 "none";
 
+
+            // Show confirmation
 
             confirmation.classList.add(
                 "show"
@@ -505,15 +405,31 @@ checkoutForm.addEventListener(
         } catch (error) {
 
             console.error(
-                "Checkout error:",
+                "CHECKOUT ERROR:",
                 error
             );
 
 
-            alert(
-                "We could not place your order. Please try again."
-            );
+            // =========================================
+            // SHOW USEFUL ERROR
+            // =========================================
 
+            let message =
+                "We could not place your order.";
+
+            if (error.message) {
+
+                message +=
+                    "\n\n" +
+                    error.message;
+
+            }
+
+
+            alert(message);
+
+
+            // Re-enable button
 
             placeOrderButton.disabled =
                 false;
@@ -528,7 +444,7 @@ checkoutForm.addEventListener(
 
 
 // =====================================================
-// SECURITY
+// ESCAPE HTML
 // =====================================================
 
 function escapeHTML(value) {
@@ -540,5 +456,4 @@ function escapeHTML(value) {
         value ?? "";
 
     return div.innerHTML;
-
 }
