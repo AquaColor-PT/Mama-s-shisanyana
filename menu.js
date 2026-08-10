@@ -1,75 +1,495 @@
-// ==========================================
+// =====================================================
 // MAMAKANANA'S SHISANYAMA
-// MENU / SHOPPING CART JAVASCRIPT
-// ==========================================
+// MENU.JS
+// =====================================================
 
 
-// ==========================================
-// CART DATA
-// ==========================================
+// =====================================================
+// SUPABASE CONFIGURATION
+// =====================================================
 
-let cart = JSON.parse(localStorage.getItem("mamakananasCart")) || [];
+const SUPABASE_URL = "https://fzydikkscegqecdepxyl.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_33Vwwv5EjoY41AyBW4a4kQ_dLXYm5LW";
 
 
-// ==========================================
+const { createClient } = window.supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// =====================================================
+// GLOBAL VARIABLES
+// =====================================================
+
+let cart =
+    JSON.parse(
+        localStorage.getItem("mamakananasCart")
+    ) || [];
+
+
+// =====================================================
 // PAGE ELEMENTS
-// ==========================================
+// =====================================================
 
-const cartCount = document.getElementById("cartCount");
+const menuContainer =
+    document.getElementById("menuContainer");
 
-const cartItems = document.getElementById("cartItems");
+const cartCount =
+    document.getElementById("cartCount");
 
-const cartTotal = document.getElementById("cartTotal");
+const cartItems =
+    document.getElementById("cartItems");
 
-const cartSidebar = document.getElementById("cartSidebar");
+const cartTotal =
+    document.getElementById("cartTotal");
 
-const cartOverlay = document.getElementById("cartOverlay");
+const cartSidebar =
+    document.getElementById("cartSidebar");
 
-const openCartButton = document.getElementById("openCart");
+const cartOverlay =
+    document.getElementById("cartOverlay");
 
-const closeCartButton = document.getElementById("closeCart");
+const openCartButton =
+    document.getElementById("openCart");
 
-const checkoutButton = document.getElementById("checkoutButton");
+const closeCartButton =
+    document.getElementById("closeCart");
 
-const mobileButton = document.getElementById("mobileButton");
+const checkoutButton =
+    document.getElementById("checkoutButton");
 
-const navLinks = document.getElementById("navLinks");
+const mobileButton =
+    document.getElementById("mobileButton");
 
-
-// ==========================================
-// ADD TO CART BUTTONS
-// ==========================================
-
-const addButtons = document.querySelectorAll(".add-cart");
-
-
-addButtons.forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-        const name = button.dataset.name;
-
-        const price = Number(button.dataset.price);
+const navLinks =
+    document.getElementById("navLinks");
 
 
-        addToCart(name, price);
+// =====================================================
+// LOAD MENU FROM SUPABASE
+// =====================================================
+
+async function loadMenu() {
+
+    try {
+
+        const {
+            data,
+            error
+        } = await db
+
+            .from("menu_items")
+
+            .select(`
+                id,
+                name,
+                description,
+                category,
+                price,
+                image_url,
+                is_available
+            `)
+
+            .eq("is_available", true)
+
+            .order("category", {
+                ascending: true
+            })
+
+            .order("name", {
+                ascending: true
+            });
+
+
+        if (error) {
+
+            console.error(
+                "Supabase menu error:",
+                error
+            );
+
+            menuContainer.innerHTML = `
+                <div class="error-message">
+
+                    <h2>
+                        Unable to load the menu
+                    </h2>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        if (!data || data.length === 0) {
+
+            menuContainer.innerHTML = `
+                <div class="error-message">
+
+                    <h2>
+                        Menu Coming Soon
+                    </h2>
+
+                    <p>
+                        We are currently updating our menu.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        displayMenu(data);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        menuContainer.innerHTML = `
+            <div class="error-message">
+
+                <h2>
+                    Something went wrong
+                </h2>
+
+                <p>
+                    Please refresh the page.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+// =====================================================
+// DISPLAY MENU
+// =====================================================
+
+function displayMenu(items) {
+
+    menuContainer.innerHTML = "";
+
+
+    // Group products by category
+
+    const categories = {};
+
+
+    items.forEach(function(item) {
+
+        if (!categories[item.category]) {
+
+            categories[item.category] = [];
+
+        }
+
+        categories[item.category].push(item);
 
     });
 
-});
+
+    // Create category sections
+
+    Object.keys(categories).forEach(function(category) {
+
+        const categorySection =
+            document.createElement("section");
+
+        categorySection.className =
+            "category";
 
 
-// ==========================================
-// ADD ITEM TO CART
-// ==========================================
+        categorySection.innerHTML = `
 
-function addToCart(name, price) {
+            <h2 class="category-title">
+                ${getCategoryIcon(category)}
+                ${escapeHTML(category)}
+            </h2>
 
-    const existingItem = cart.find(function(item) {
+            <div class="red-line"></div>
 
-        return item.name === name;
+            <div class="food-grid"></div>
+
+        `;
+
+
+        const foodGrid =
+            categorySection.querySelector(
+                ".food-grid"
+            );
+
+
+        categories[category].forEach(function(item) {
+
+            const card =
+                createFoodCard(item);
+
+            foodGrid.appendChild(card);
+
+        });
+
+
+        menuContainer.appendChild(
+            categorySection
+        );
 
     });
+
+
+    // Attach Add To Cart buttons
+
+    document
+        .querySelectorAll(".add-cart")
+        .forEach(function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const itemId =
+                        button.dataset.id;
+
+                    const item =
+                        items.find(function(product) {
+
+                            return product.id === itemId;
+
+                        });
+
+
+                    if (item) {
+
+                        addToCart(item);
+
+                    }
+
+                }
+            );
+
+        });
+
+}
+
+
+// =====================================================
+// CREATE FOOD CARD
+// =====================================================
+
+function createFoodCard(item) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "food-card";
+
+
+    let imageHTML;
+
+
+    if (item.image_url) {
+
+        imageHTML = `
+
+            <img
+                src="${escapeAttribute(item.image_url)}"
+                alt="${escapeAttribute(item.name)}"
+            >
+
+        `;
+
+    } else {
+
+        imageHTML = `
+
+            <span class="food-emoji">
+                ${getFoodEmoji(item.category)}
+            </span>
+
+        `;
+
+    }
+
+
+    card.innerHTML = `
+
+        <div class="food-image">
+
+            ${imageHTML}
+
+        </div>
+
+
+        <div class="food-content">
+
+            <h3>
+                ${escapeHTML(item.name)}
+            </h3>
+
+
+            <p class="food-description">
+
+                ${
+                    item.description
+                    ? escapeHTML(item.description)
+                    : "Freshly prepared at Mamakanana's Shisanyama."
+                }
+
+            </p>
+
+
+            <div class="food-bottom">
+
+                <span class="price">
+
+                    R${Number(item.price).toFixed(2)}
+
+                </span>
+
+
+                <button
+                    class="add-cart"
+                    data-id="${item.id}"
+                >
+
+                    Add to Cart
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    return card;
+
+}
+
+
+// =====================================================
+// CATEGORY ICON
+// =====================================================
+
+function getCategoryIcon(category) {
+
+    const name =
+        category.toLowerCase();
+
+
+    if (
+        name.includes("meat") ||
+        name.includes("grill")
+    ) {
+
+        return "🍖";
+
+    }
+
+
+    if (
+        name.includes("side")
+    ) {
+
+        return "🍟";
+
+    }
+
+
+    if (
+        name.includes("drink")
+    ) {
+
+        return "🥤";
+
+    }
+
+
+    if (
+        name.includes("dessert")
+    ) {
+
+        return "🍰";
+
+    }
+
+
+    return "🍽️";
+
+}
+
+
+// =====================================================
+// FOOD EMOJI
+// =====================================================
+
+function getFoodEmoji(category) {
+
+    const name =
+        category.toLowerCase();
+
+
+    if (
+        name.includes("meat") ||
+        name.includes("grill")
+    ) {
+
+        return "🥩";
+
+    }
+
+
+    if (
+        name.includes("side")
+    ) {
+
+        return "🍟";
+
+    }
+
+
+    if (
+        name.includes("drink")
+    ) {
+
+        return "🥤";
+
+    }
+
+
+    return "🍽️";
+
+}
+
+
+// =====================================================
+// ADD TO CART
+// =====================================================
+
+function addToCart(item) {
+
+    const existingItem =
+        cart.find(function(cartItem) {
+
+            return cartItem.id === item.id;
+
+        });
 
 
     if (existingItem) {
@@ -80,9 +500,11 @@ function addToCart(name, price) {
 
         cart.push({
 
-            name: name,
+            id: item.id,
 
-            price: price,
+            name: item.name,
+
+            price: Number(item.price),
 
             quantity: 1
 
@@ -100,9 +522,9 @@ function addToCart(name, price) {
 }
 
 
-// ==========================================
+// =====================================================
 // SAVE CART
-// ==========================================
+// =====================================================
 
 function saveCart() {
 
@@ -114,9 +536,9 @@ function saveCart() {
 }
 
 
-// ==========================================
+// =====================================================
 // UPDATE CART
-// ==========================================
+// =====================================================
 
 function updateCart() {
 
@@ -127,9 +549,9 @@ function updateCart() {
 }
 
 
-// ==========================================
-// UPDATE CART COUNTER
-// ==========================================
+// =====================================================
+// UPDATE CART COUNT
+// =====================================================
 
 function updateCartCount() {
 
@@ -143,14 +565,15 @@ function updateCartCount() {
     });
 
 
-    cartCount.textContent = totalItems;
+    cartCount.textContent =
+        totalItems;
 
 }
 
 
-// ==========================================
-// DISPLAY CART
-// ==========================================
+// =====================================================
+// RENDER CART
+// =====================================================
 
 function renderCart() {
 
@@ -160,12 +583,15 @@ function renderCart() {
     if (cart.length === 0) {
 
         cartItems.innerHTML = `
+
             <p class="empty-cart">
                 Your cart is empty.
             </p>
+
         `;
 
-        cartTotal.textContent = "R0";
+        cartTotal.textContent =
+            "R0.00";
 
         return;
 
@@ -184,9 +610,11 @@ function renderCart() {
         total += itemTotal;
 
 
-        const cartItem = document.createElement("div");
+        const cartItem =
+            document.createElement("div");
 
-        cartItem.classList.add("cart-item");
+        cartItem.className =
+            "cart-item";
 
 
         cartItem.innerHTML = `
@@ -194,12 +622,14 @@ function renderCart() {
             <div class="cart-item-top">
 
                 <h3>
-                    ${item.name}
+                    ${escapeHTML(item.name)}
                 </h3>
+
 
                 <button
                     class="remove-item"
-                    data-index="${index}">
+                    data-index="${index}"
+                >
 
                     Remove
 
@@ -214,7 +644,8 @@ function renderCart() {
 
                     <button
                         class="decrease"
-                        data-index="${index}">
+                        data-index="${index}"
+                    >
 
                         −
 
@@ -228,7 +659,8 @@ function renderCart() {
 
                     <button
                         class="increase"
-                        data-index="${index}">
+                        data-index="${index}"
+                    >
 
                         +
 
@@ -239,7 +671,7 @@ function renderCart() {
 
                 <span class="cart-price">
 
-                    R${itemTotal}
+                    R${itemTotal.toFixed(2)}
 
                 </span>
 
@@ -253,7 +685,8 @@ function renderCart() {
     });
 
 
-    cartTotal.textContent = "R" + total;
+    cartTotal.textContent =
+        "R" + total.toFixed(2);
 
 
     attachCartEvents();
@@ -261,130 +694,143 @@ function renderCart() {
 }
 
 
-// ==========================================
-// CART BUTTON EVENTS
-// ==========================================
+// =====================================================
+// CART EVENTS
+// =====================================================
 
 function attachCartEvents() {
 
 
-    // INCREASE QUANTITY
+    // INCREASE
 
-    const increaseButtons =
-        document.querySelectorAll(".increase");
+    document
+        .querySelectorAll(".increase")
+        .forEach(function(button) {
 
+            button.addEventListener(
+                "click",
+                function() {
 
-    increaseButtons.forEach(function(button) {
-
-        button.addEventListener("click", function() {
-
-            const index =
-                Number(button.dataset.index);
-
-
-            cart[index].quantity++;
+                    const index =
+                        Number(button.dataset.index);
 
 
-            saveCart();
-
-            updateCart();
-
-        });
-
-    });
+                    cart[index].quantity++;
 
 
-    // DECREASE QUANTITY
+                    saveCart();
 
-    const decreaseButtons =
-        document.querySelectorAll(".decrease");
+                    updateCart();
 
-
-    decreaseButtons.forEach(function(button) {
-
-        button.addEventListener("click", function() {
-
-            const index =
-                Number(button.dataset.index);
-
-
-            if (cart[index].quantity > 1) {
-
-                cart[index].quantity--;
-
-            } else {
-
-                cart.splice(index, 1);
-
-            }
-
-
-            saveCart();
-
-            updateCart();
+                }
+            );
 
         });
 
-    });
+
+    // DECREASE
+
+    document
+        .querySelectorAll(".decrease")
+        .forEach(function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const index =
+                        Number(button.dataset.index);
 
 
-    // REMOVE ITEM
+                    if (
+                        cart[index].quantity > 1
+                    ) {
 
-    const removeButtons =
-        document.querySelectorAll(".remove-item");
+                        cart[index].quantity--;
 
+                    } else {
 
-    removeButtons.forEach(function(button) {
+                        cart.splice(index, 1);
 
-        button.addEventListener("click", function() {
-
-            const index =
-                Number(button.dataset.index);
-
-
-            cart.splice(index, 1);
+                    }
 
 
-            saveCart();
+                    saveCart();
 
-            updateCart();
+                    updateCart();
+
+                }
+            );
 
         });
 
-    });
+
+    // REMOVE
+
+    document
+        .querySelectorAll(".remove-item")
+        .forEach(function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const index =
+                        Number(button.dataset.index);
+
+
+                    cart.splice(index, 1);
+
+
+                    saveCart();
+
+                    updateCart();
+
+                }
+            );
+
+        });
 
 }
 
 
-// ==========================================
+// =====================================================
 // OPEN CART
-// ==========================================
+// =====================================================
 
 function openCart() {
 
-    cartSidebar.classList.add("active");
+    cartSidebar.classList.add(
+        "active"
+    );
 
-    cartOverlay.classList.add("active");
+    cartOverlay.classList.add(
+        "active"
+    );
 
 }
 
 
-// ==========================================
+// =====================================================
 // CLOSE CART
-// ==========================================
+// =====================================================
 
 function closeCart() {
 
-    cartSidebar.classList.remove("active");
+    cartSidebar.classList.remove(
+        "active"
+    );
 
-    cartOverlay.classList.remove("active");
+    cartOverlay.classList.remove(
+        "active"
+    );
 
 }
 
 
-// ==========================================
+// =====================================================
 // CART BUTTON
-// ==========================================
+// =====================================================
 
 openCartButton.addEventListener(
     "click",
@@ -392,9 +838,9 @@ openCartButton.addEventListener(
 );
 
 
-// ==========================================
-// CLOSE BUTTON
-// ==========================================
+// =====================================================
+// CLOSE CART
+// =====================================================
 
 closeCartButton.addEventListener(
     "click",
@@ -402,9 +848,9 @@ closeCartButton.addEventListener(
 );
 
 
-// ==========================================
+// =====================================================
 // CLICK OUTSIDE CART
-// ==========================================
+// =====================================================
 
 cartOverlay.addEventListener(
     "click",
@@ -412,23 +858,25 @@ cartOverlay.addEventListener(
 );
 
 
-// ==========================================
-// MOBILE NAVIGATION
-// ==========================================
+// =====================================================
+// MOBILE MENU
+// =====================================================
 
 mobileButton.addEventListener(
     "click",
     function() {
 
-        navLinks.classList.toggle("active");
+        navLinks.classList.toggle(
+            "active"
+        );
 
     }
 );
 
 
-// ==========================================
+// =====================================================
 // CHECKOUT
-// ==========================================
+// =====================================================
 
 checkoutButton.addEventListener(
     "click",
@@ -437,7 +885,7 @@ checkoutButton.addEventListener(
         if (cart.length === 0) {
 
             alert(
-                "Your cart is empty. Please add some food first."
+                "Your cart is empty. Please add something first."
             );
 
             return;
@@ -445,14 +893,45 @@ checkoutButton.addEventListener(
         }
 
 
-        window.location.href = "checkout.html";
+        window.location.href =
+            "checkout.html";
 
     }
 );
 
 
-// ==========================================
-// INITIAL LOAD
-// ==========================================
+// =====================================================
+// HTML SECURITY HELPERS
+// =====================================================
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+loadMenu();
 
 updateCart();
