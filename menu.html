@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Menu | Mamakanana's Shisanyama</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
 
@@ -38,9 +38,8 @@
 
         nav {
             max-width: 1200px;
-            margin: auto;
-
             min-height: 90px;
+            margin: auto;
             padding: 10px 25px;
 
             display: flex;
@@ -61,7 +60,6 @@
         .logo img {
             width: 65px;
             height: 65px;
-
             object-fit: contain;
             border-radius: 50%;
         }
@@ -86,7 +84,6 @@
             display: flex;
             align-items: center;
             gap: 30px;
-
             list-style: none;
         }
 
@@ -101,25 +98,20 @@
         }
 
         /* =========================
-           CART BUTTON
+           CART
         ========================= */
 
         .cart-button {
             border: none;
-
             background: #08783e;
             color: white;
 
             padding: 12px 18px;
-
             border-radius: 7px;
 
             font-size: 16px;
             font-weight: bold;
-
             cursor: pointer;
-
-            transition: 0.3s;
         }
 
         .cart-button:hover {
@@ -128,11 +120,8 @@
 
         #cartCount {
             background: #e51c23;
-
             padding: 3px 7px;
-
             border-radius: 50%;
-
             margin-left: 5px;
         }
 
@@ -142,16 +131,13 @@
 
         .mobile-button {
             display: none;
-
             font-size: 28px;
-
             color: #08783e;
-
             cursor: pointer;
         }
 
         /* =========================
-           MENU HEADER
+           HERO
         ========================= */
 
         .menu-header {
@@ -166,7 +152,6 @@
             background-position: center;
 
             color: white;
-
             text-align: center;
 
             padding: 90px 20px;
@@ -186,20 +171,14 @@
         }
 
         /* =========================
-           MENU CONTAINER
+           MENU
         ========================= */
 
         .menu-container {
             max-width: 1150px;
-
             margin: auto;
-
             padding: 70px 20px;
         }
-
-        /* =========================
-           CATEGORY
-        ========================= */
 
         .category {
             margin-bottom: 70px;
@@ -207,22 +186,16 @@
 
         .category-title {
             text-align: center;
-
             color: #08783e;
-
             font-size: 34px;
-
             margin-bottom: 12px;
         }
 
         .red-line {
             width: 65px;
             height: 5px;
-
             background: #e51c23;
-
             margin: 0 auto 35px;
-
             border-radius: 5px;
         }
 
@@ -232,10 +205,7 @@
 
         .food-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
         }
 
@@ -245,13 +215,10 @@
 
         .food-card {
             background: white;
-
             border-radius: 12px;
-
             overflow: hidden;
 
-            box-shadow:
-                0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 
             transition: 0.3s;
 
@@ -260,12 +227,8 @@
 
         .food-card:hover {
             transform: translateY(-5px);
-
-            box-shadow:
-                0 10px 25px rgba(0,0,0,0.13);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.13);
         }
-
-        /* Food image placeholder */
 
         .food-image {
             height: 190px;
@@ -278,10 +241,19 @@
                 );
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
+            overflow: hidden;
+        }
+
+        .food-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .food-emoji {
             font-size: 65px;
         }
 
@@ -291,63 +263,64 @@
 
         .food-content h3 {
             color: #173b2a;
-
             font-size: 21px;
-
             margin-bottom: 8px;
         }
 
         .food-description {
             color: #777;
-
             font-size: 14px;
-
             line-height: 1.5;
-
             min-height: 42px;
         }
 
         .food-bottom {
             display: flex;
-
             align-items: center;
             justify-content: space-between;
-
             margin-top: 20px;
         }
 
         .price {
             color: #e51c23;
-
             font-size: 20px;
-
             font-weight: bold;
         }
 
-        /* =========================
-           ADD TO CART
-        ========================= */
-
         .add-cart {
             border: none;
-
             background: #08783e;
-
             color: white;
 
             padding: 11px 15px;
-
             border-radius: 6px;
 
             cursor: pointer;
-
             font-weight: bold;
-
-            transition: 0.3s;
         }
 
         .add-cart:hover {
             background: #e51c23;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+
+            color: #08783e;
+            font-size: 20px;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 20px;
+
+            color: #e51c23;
+            font-weight: bold;
         }
 
         /* =========================
@@ -358,7 +331,6 @@
             display: none;
 
             position: fixed;
-
             inset: 0;
 
             background: rgba(0,0,0,0.55);
@@ -390,32 +362,24 @@
             z-index: 3000;
 
             display: flex;
-
             flex-direction: column;
 
             transition: 0.35s;
 
-            box-shadow:
-                -5px 0 20px rgba(0,0,0,0.15);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.15);
         }
 
         .cart-sidebar.active {
             right: 0;
         }
 
-        /* =========================
-           CART HEADER
-        ========================= */
-
         .cart-header {
             background: #08783e;
-
             color: white;
 
             padding: 20px;
 
             display: flex;
-
             align-items: center;
             justify-content: space-between;
         }
@@ -426,49 +390,35 @@
 
         .close-cart {
             background: none;
-
             border: none;
 
             color: white;
-
             font-size: 28px;
 
             cursor: pointer;
         }
 
-        /* =========================
-           CART ITEMS
-        ========================= */
-
         .cart-items {
             flex: 1;
-
             overflow-y: auto;
-
             padding: 20px;
         }
 
         .empty-cart {
             text-align: center;
-
             color: #777;
-
             margin-top: 80px;
-
             font-size: 18px;
         }
 
         .cart-item {
             border-bottom: 1px solid #ddd;
-
             padding: 15px 0;
         }
 
         .cart-item-top {
             display: flex;
-
             justify-content: space-between;
-
             gap: 10px;
         }
 
@@ -479,19 +429,15 @@
 
         .remove-item {
             border: none;
-
             background: none;
 
             color: #e51c23;
-
             cursor: pointer;
-
             font-weight: bold;
         }
 
         .cart-item-bottom {
             display: flex;
-
             align-items: center;
             justify-content: space-between;
 
@@ -500,9 +446,7 @@
 
         .quantity-controls {
             display: flex;
-
             align-items: center;
-
             gap: 10px;
         }
 
@@ -511,21 +455,16 @@
             height: 28px;
 
             border: none;
-
             background: #08783e;
-
             color: white;
 
             border-radius: 4px;
-
             cursor: pointer;
-
             font-weight: bold;
         }
 
         .cart-price {
             color: #e51c23;
-
             font-weight: bold;
         }
 
@@ -535,17 +474,14 @@
 
         .cart-footer {
             padding: 20px;
-
             border-top: 1px solid #ddd;
         }
 
         .cart-total {
             display: flex;
-
             justify-content: space-between;
 
             font-size: 20px;
-
             font-weight: bold;
 
             margin-bottom: 15px;
@@ -559,22 +495,16 @@
             width: 100%;
 
             border: none;
-
             background: #08783e;
-
             color: white;
 
             padding: 15px;
-
             border-radius: 7px;
 
             font-size: 17px;
-
             font-weight: bold;
 
             cursor: pointer;
-
-            transition: 0.3s;
         }
 
         .checkout-button:hover {
@@ -587,11 +517,9 @@
 
         footer {
             background: #062f1b;
-
             color: white;
 
             text-align: center;
-
             padding: 30px;
         }
 
@@ -606,8 +534,7 @@
         @media (max-width: 900px) {
 
             .food-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
         }
@@ -645,7 +572,6 @@
 
             .nav-links a {
                 display: block;
-
                 padding: 16px;
             }
 
@@ -690,8 +616,10 @@
 
         <div class="logo">
 
-            <img src="logo.jpg"
-                 alt="Mamakanana's Shisanyama Logo">
+            <img
+                src="logo.jpg"
+                alt="Mamakanana's Shisanyama Logo"
+            >
 
             <div class="logo-text">
 
@@ -708,16 +636,18 @@
         </div>
 
 
-        <div class="mobile-button"
-             id="mobileButton">
-
+        <div
+            class="mobile-button"
+            id="mobileButton"
+        >
             ☰
-
         </div>
 
 
-        <ul class="nav-links"
-            id="navLinks">
+        <ul
+            class="nav-links"
+            id="navLinks"
+        >
 
             <li>
                 <a href="index.html">
@@ -738,8 +668,11 @@
             </li>
 
             <li>
-                <button class="cart-button"
-                        id="openCart">
+
+                <button
+                    class="cart-button"
+                    id="openCart"
+                >
 
                     🛒 Cart
 
@@ -748,6 +681,7 @@
                     </span>
 
                 </button>
+
             </li>
 
         </ul>
@@ -758,7 +692,7 @@
 
 
 <!-- =========================
-     MENU HERO
+     HERO
 ========================= -->
 
 <section class="menu-header">
@@ -775,438 +709,17 @@
 
 
 <!-- =========================
-     MENU
+     MENU CONTAINER
 ========================= -->
 
-<main class="menu-container">
-
-
-    <!-- GRILLED MEAT -->
-
-    <section class="category">
-
-        <h2 class="category-title">
-            🍖 Grilled Meat
-        </h2>
-
-        <div class="red-line"></div>
-
-
-        <div class="food-grid">
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🥩
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Beef
-                    </h3>
-
-                    <p class="food-description">
-                        Freshly grilled beef with
-                        authentic shisanyama flavour.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R80
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Beef"
-                                data-price="80">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🍗
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Chicken
-                    </h3>
-
-                    <p class="food-description">
-                        Delicious grilled chicken
-                        prepared fresh.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R60
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Chicken"
-                                data-price="60">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🌭
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Boerewors
-                    </h3>
-
-                    <p class="food-description">
-                        Traditional South African
-                        grilled boerewors.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R45
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Boerewors"
-                                data-price="45">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🥩
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Steak
-                    </h3>
-
-                    <p class="food-description">
-                        Tender grilled steak
-                        cooked to perfection.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R100
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Steak"
-                                data-price="100">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SIDES -->
-
-    <section class="category">
-
-        <h2 class="category-title">
-            🍟 Sides
-        </h2>
-
-        <div class="red-line"></div>
-
-
-        <div class="food-grid">
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🍟
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Chips
-                    </h3>
-
-                    <p class="food-description">
-                        Crispy golden chips.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R30
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Chips"
-                                data-price="30">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🍚
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Pap
-                    </h3>
-
-                    <p class="food-description">
-                        Traditional South African pap.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R25
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Pap"
-                                data-price="25">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🥗
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Salad
-                    </h3>
-
-                    <p class="food-description">
-                        Fresh garden salad.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R25
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Salad"
-                                data-price="25">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🥬
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Vegetables
-                    </h3>
-
-                    <p class="food-description">
-                        Freshly prepared vegetables.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R25
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Vegetables"
-                                data-price="25">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- DRINKS -->
-
-    <section class="category">
-
-        <h2 class="category-title">
-            🥤 Drinks
-        </h2>
-
-        <div class="red-line"></div>
-
-
-        <div class="food-grid">
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    🥤
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Soft Drink
-                    </h3>
-
-                    <p class="food-description">
-                        Choose your favourite soft drink.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R20
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Soft Drink"
-                                data-price="20">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-image">
-                    💧
-                </div>
-
-                <div class="food-content">
-
-                    <h3>
-                        Water
-                    </h3>
-
-                    <p class="food-description">
-                        Refreshing bottled water.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            R15
-                        </span>
-
-                        <button class="add-cart"
-                                data-name="Water"
-                                data-price="15">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
+<main
+    class="menu-container"
+    id="menuContainer"
+>
+
+    <div class="loading">
+        Loading our menu...
+    </div>
 
 </main>
 
@@ -1215,8 +728,10 @@
      CART OVERLAY
 ========================= -->
 
-<div class="cart-overlay"
-     id="cartOverlay">
+<div
+    class="cart-overlay"
+    id="cartOverlay"
+>
 </div>
 
 
@@ -1224,9 +739,10 @@
      CART SIDEBAR
 ========================= -->
 
-<aside class="cart-sidebar"
-       id="cartSidebar">
-
+<aside
+    class="cart-sidebar"
+    id="cartSidebar"
+>
 
     <div class="cart-header">
 
@@ -1234,18 +750,20 @@
             Your Cart 🛒
         </h2>
 
-        <button class="close-cart"
-                id="closeCart">
-
+        <button
+            class="close-cart"
+            id="closeCart"
+        >
             ×
-
         </button>
 
     </div>
 
 
-    <div class="cart-items"
-         id="cartItems">
+    <div
+        class="cart-items"
+        id="cartItems"
+    >
 
         <p class="empty-cart">
             Your cart is empty.
@@ -1263,17 +781,17 @@
             </span>
 
             <span id="cartTotal">
-                R0
+                R0.00
             </span>
 
         </div>
 
 
-        <button class="checkout-button"
-                id="checkoutButton">
-
+        <button
+            class="checkout-button"
+            id="checkoutButton"
+        >
             PROCEED TO CHECKOUT
-
         </button>
 
     </div>
