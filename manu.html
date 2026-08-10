@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Menu | Mamakanana's Shisanyama</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #222;
+        }
+
+        /* HEADER */
+
+        header {
+            background: white;
+            border-bottom: 4px solid #08783e;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: auto;
+
+            min-height: 90px;
+
+            padding: 10px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* LOGO */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo-text h1 {
+            color: #08783e;
+            font-size: 22px;
+        }
+
+        .logo-text span {
+            color: #e51c23;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* NAVIGATION */
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #173b2a;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            color: #e51c23;
+        }
+
+        .mobile-button {
+            display: none;
+            font-size: 28px;
+            color: #08783e;
+            cursor: pointer;
+        }
+
+        /* MENU HERO */
+
+        .menu-header {
+            background: #08783e;
+            color: white;
+            text-align: center;
+
+            padding: 70px 20px;
+        }
+
+        .menu-header h2 {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .menu-header p {
+            font-size: 18px;
+        }
+
+        /* MENU */
+
+        .menu-container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 80px 20px;
+        }
+
+        .category {
+            margin-bottom: 60px;
+        }
+
+        .category-title {
+            text-align: center;
+            color: #08783e;
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        .red-line {
+            width: 65px;
+            height: 5px;
+            background: #e51c23;
+            margin: -20px auto 30px;
+        }
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .item {
+            padding: 22px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: #f5f9f6;
+
+            border-left: 5px solid #08783e;
+
+            border-radius: 7px;
+        }
+
+        .item h3 {
+            color: #173b2a;
+            margin-bottom: 5px;
+        }
+
+        .item p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .price {
+            color: #e51c23;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #062f1b;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer span {
+            color: #e51c23;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 768px) {
+
+            .nav-links {
+                display: none;
+
+                position: absolute;
+
+                top: 90px;
+                left: 0;
+
+                width: 100%;
+
+                background: white;
+
+                flex-direction: column;
+
+                gap: 0;
+
+                text-align: center;
+
+                z-index: 100;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                padding: 15px;
+            }
+
+            .mobile-button {
+                display: block;
+            }
+
+            .items {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-header h2 {
+                font-size: 42px;
+            }
+
+            .logo-text h1 {
+                font-size: 17px;
+            }
+
+            .logo img {
+                width: 55px;
+                height: 55px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <nav>
+
+            <div class="logo">
+
+                <img src="logo.jpg"
+                     alt="Mamakanana's Shisanyama Logo">
+
+                <div class="logo-text">
+
+                    <h1>
+                        Mamakanana's
+                    </h1>
+
+                    <span>
+                        SHISANYAMA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="mobile-button"
+                 id="mobileButton">
+
+                ☰
+
+            </div>
+
+
+            <ul class="nav-links"
+                id="navLinks">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="menu.html">
+                        Menu
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#about">
+                        About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- MENU TITLE -->
+
+    <section class="menu-header">
+
+        <h2>
+            Our Menu
+        </h2>
+
+        <p>
+            Freshly prepared. Perfectly grilled.
+        </p>
+
+    </section>
+
+
+    <!-- MENU -->
+
+    <main class="menu-container">
+
+
+        <!-- MEAT -->
+
+        <section class="category">
+
+            <h2 class="category-title">
+                🍖 Grilled Meat
+            </h2>
+
+            <div class="red-line"></div>
+
+
+            <div class="items">
+
+                <div class="item">
+
+                    <div>
+                        <h3>Beef</h3>
+                        <p>Freshly grilled beef</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Chicken</h3>
+                        <p>Grilled chicken</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Boerewors</h3>
+                        <p>Traditional South African wors</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Steak</h3>
+                        <p>Grilled steak</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SIDES -->
+
+        <section class="category">
+
+            <h2 class="category-title">
+                🍟 Sides
+            </h2>
+
+            <div class="red-line"></div>
+
+
+            <div class="items">
+
+                <div class="item">
+
+                    <div>
+                        <h3>Chips</h3>
+                        <p>Crispy golden chips</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Pap</h3>
+                        <p>Traditional pap</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Salad</h3>
+                        <p>Fresh garden salad</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Vegetables</h3>
+                        <p>Fresh vegetables</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DRINKS -->
+
+        <section class="category">
+
+            <h2 class="category-title">
+                🥤 Drinks
+            </h2>
+
+            <div class="red-line"></div>
+
+
+            <div class="items">
+
+                <div class="item">
+
+                    <div>
+                        <h3>Soft Drink</h3>
+                        <p>Choose your favourite</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+
+                <div class="item">
+
+                    <div>
+                        <h3>Water</h3>
+                        <p>Still water</p>
+                    </div>
+
+                    <span class="price">
+                        R___
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 Mamakanana's Shisanyama
+        </p>
+
+        <p>
+            <span>Good Food</span>
+            • Great Company • Authentic Flavour
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
