@@ -1,6 +1,6 @@
 // =====================================================
 // MAMAKANANA'S SHISANYAMA
-// SECURE CHECKOUT
+// SECURE CHECKOUT + EMAIL
 // =====================================================
 
 
@@ -8,8 +8,11 @@
 // SUPABASE
 // =====================================================
 
-const SUPABASE_URL = "https://fzydikkscegqecdepxyl.supabase.co";
-const SUPABASE_KEY = "sb_publishable_33Vwwv5EjoY41AyBW4a4kQ_dLXYm5LW";
+const SUPABASE_URL =
+    "https://fzydikkscegqecdepxyl.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_33Vwwv5EjoY41AyBW4a4kQ_dLXYm5LW";
 
 const { createClient } = window.supabase;
 
@@ -173,19 +176,23 @@ orderType.addEventListener(
     "change",
     function() {
 
-        if (orderType.value === "delivery") {
+        if (
+            orderType.value === "delivery"
+        ) {
 
             deliveryAddressContainer
                 .classList.add("show");
 
-            deliveryAddress.required = true;
+            deliveryAddress.required =
+                true;
 
         } else {
 
             deliveryAddressContainer
                 .classList.remove("show");
 
-            deliveryAddress.required = false;
+            deliveryAddress.required =
+                false;
 
             deliveryAddress.value = "";
 
@@ -213,12 +220,14 @@ checkoutForm.addEventListener(
             );
 
             return;
+
         }
 
 
         // Prevent double submission
 
-        placeOrderButton.disabled = true;
+        placeOrderButton.disabled =
+            true;
 
         placeOrderButton.textContent =
             "PLACING ORDER...";
@@ -232,21 +241,27 @@ checkoutForm.addEventListener(
 
             const customerName =
                 document
-                    .getElementById("customerName")
+                    .getElementById(
+                        "customerName"
+                    )
                     .value
                     .trim();
 
 
             const customerPhone =
                 document
-                    .getElementById("customerPhone")
+                    .getElementById(
+                        "customerPhone"
+                    )
                     .value
                     .trim();
 
 
             const customerEmail =
                 document
-                    .getElementById("customerEmail")
+                    .getElementById(
+                        "customerEmail"
+                    )
                     .value
                     .trim();
 
@@ -256,28 +271,41 @@ checkoutForm.addEventListener(
 
 
             const selectedAddress =
-                deliveryAddress.value.trim();
+                deliveryAddress
+                    .value
+                    .trim();
 
 
             const notes =
                 document
-                    .getElementById("notes")
+                    .getElementById(
+                        "notes"
+                    )
                     .value
                     .trim();
 
 
             // =========================================
-            // PREPARE ITEMS
+            // CALCULATE DISPLAY TOTAL
             // =========================================
-            //
-            // IMPORTANT:
-            // We only send the menu item ID
-            // and quantity.
-            //
-            // We DO NOT trust the browser's price.
-            //
-            // Supabase will get the real price
-            // from menu_items.
+
+            const orderTotal =
+                cart.reduce(
+                    function(total, item) {
+
+                        return total +
+                            (
+                                Number(item.price) *
+                                Number(item.quantity)
+                            );
+
+                    },
+                    0
+                );
+
+
+            // =========================================
+            // PREPARE ITEMS
             // =========================================
 
             const itemsForDatabase =
@@ -297,7 +325,7 @@ checkoutForm.addEventListener(
 
 
             // =========================================
-            // CALL SECURE SUPABASE FUNCTION
+            // CREATE ORDER
             // =========================================
 
             const {
@@ -336,7 +364,7 @@ checkoutForm.addEventListener(
 
 
             // =========================================
-            // SUPABASE ERROR
+            // CHECK ORDER ERROR
             // =========================================
 
             if (orderError) {
@@ -351,10 +379,6 @@ checkoutForm.addEventListener(
             }
 
 
-            // =========================================
-            // CHECK RESPONSE
-            // =========================================
-
             if (!orderNumber) {
 
                 throw new Error(
@@ -368,6 +392,69 @@ checkoutForm.addEventListener(
                 "Order successfully created:",
                 orderNumber
             );
+
+
+            // =========================================
+            // SEND CUSTOMER EMAIL
+            // =========================================
+
+            if (customerEmail) {
+
+                try {
+
+                    const {
+                        data: emailData,
+                        error: emailError
+                    } = await db.functions.invoke(
+                        "send-order-email",
+                        {
+
+                            body: {
+
+                                customer_email:
+                                    customerEmail,
+
+                                customer_name:
+                                    customerName,
+
+                                order_number:
+                                    orderNumber,
+
+                                total_amount:
+                                    orderTotal
+
+                            }
+
+                        }
+                    );
+
+
+                    if (emailError) {
+
+                        console.error(
+                            "Email error:",
+                            emailError
+                        );
+
+                    } else {
+
+                        console.log(
+                            "Order email sent:",
+                            emailData
+                        );
+
+                    }
+
+                } catch (emailError) {
+
+                    console.error(
+                        "Could not send order email:",
+                        emailError
+                    );
+
+                }
+
+            }
 
 
             // =========================================
@@ -389,13 +476,9 @@ checkoutForm.addEventListener(
                 "#" + orderNumber;
 
 
-            // Hide checkout
-
             checkoutPage.style.display =
                 "none";
 
-
-            // Show confirmation
 
             confirmation.classList.add(
                 "show"
@@ -410,12 +493,9 @@ checkoutForm.addEventListener(
             );
 
 
-            // =========================================
-            // SHOW USEFUL ERROR
-            // =========================================
-
             let message =
                 "We could not place your order.";
+
 
             if (error.message) {
 
@@ -428,8 +508,6 @@ checkoutForm.addEventListener(
 
             alert(message);
 
-
-            // Re-enable button
 
             placeOrderButton.disabled =
                 false;
