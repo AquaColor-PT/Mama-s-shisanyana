@@ -104,6 +104,20 @@
             border-radius: 6px;
         }
 
+        /* DASHBOARD BUTTON */
+
+        .dashboard-btn {
+            background: #08783e;
+            color: white !important;
+            padding: 12px 18px;
+            border-radius: 6px;
+        }
+
+        .dashboard-btn:hover {
+            background: #e51c23;
+            color: white !important;
+        }
+
         /* =========================
            MOBILE BUTTON
         ========================= */
@@ -391,11 +405,11 @@
                 width: 55px;
                 height: 55px;
             }
+
+            .dashboard-btn {
+                margin: 5px auto;
+            }
         }
-        /* Invisible admin dashboard link */
-#adminDashboardLink {
-    display: none;
-}
     </style>
 </head>
 
@@ -438,6 +452,17 @@
 
                 <li>
                     <a href="#contact">Contact</a>
+                </li>
+
+                <!-- DASHBOARD -->
+
+                <li>
+                    <a
+                        href="dashboard.html"
+                        class="dashboard-btn"
+                    >
+                        Dashboard
+                    </a>
                 </li>
 
             </ul>
@@ -618,12 +643,8 @@
 
     </footer>
 
+
     <script src="script.js"></script>
-  <!-- Invisible Admin Dashboard Access -->
-<a
-    href="dashboard.html"
-    id="adminDashboardLink"
-    aria-label="Admin Dashboard">
-</a>
+
 </body>
 </html>
