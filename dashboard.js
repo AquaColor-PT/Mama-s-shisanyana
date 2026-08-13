@@ -110,7 +110,8 @@ async function loadOrders() {
 
 
     allOrders = data || [];
-
+    console.log("ORDERS RECEIVED:", data);
+console.log("NUMBER OF ORDERS:", data?.length);
 
     updateStatistics();
 
