@@ -10,6 +10,39 @@
         * {
             box-sizing: border-box;
         }
+        .status-select {
+    padding: 6px 9px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.status-select.status-new {
+    background: #e4f7eb;
+    color: #08783e;
+}
+
+.status-select.status-processing {
+    background: #fff1d6;
+    color: #a66500;
+}
+
+.status-select.status-ready {
+    background: #e5f0ff;
+    color: #1769aa;
+}
+
+.status-select.status-completed {
+    background: #e8e8e8;
+    color: #444;
+}
+
+.status-select.status-cancelled {
+    background: #ffe5e5;
+    color: #c41219;
+}
 
         body {
             margin: 0;
