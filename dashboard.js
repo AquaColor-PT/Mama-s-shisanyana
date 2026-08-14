@@ -1251,8 +1251,8 @@ function getStatusClass(
         case "new":
             return "status-new";
 
-        case "processing":
-            return "status-processing";
+       case "preparing":
+            return "status-preparing";
 
         case "ready":
             return "status-ready";
