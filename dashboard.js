@@ -434,30 +434,24 @@ async function loadOrders() {
         "Loading orders..."
     );
 
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("orders")
-            .select(`
-                *,
-                order_items (
-                    id,
-                    item_name,
-                    quantity,
-                    unit_price,
-                    subtotal
-                )
-            `)
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
-
+const {
+    data,
+    error
+} = await supabaseClient
+    .from("orders")
+    .select(`
+        *,
+        order_items (
+            id,
+            item_name,
+            quantity,
+            unit_price,
+            subtotal
+        )
+    `)
+    .order("created_at", {
+        ascending: true
+    });
 
     if (error) {
 
