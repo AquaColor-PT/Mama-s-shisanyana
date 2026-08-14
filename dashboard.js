@@ -640,9 +640,9 @@ function renderOrders(
             New
         </option>
 
-        <option value="processing" ${order.status === "processing" ? "selected" : ""}>
-            Processing
-        </option>
+      <option value="preparing" ${order.status === "preparing" ? "selected" : ""}>
+    Preparing
+</option>
 
         <option value="ready" ${order.status === "ready" ? "selected" : ""}>
             Ready
