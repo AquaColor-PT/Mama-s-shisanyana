@@ -1,31 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Mamakanana's Shisanyama - Dashboard
-    </title>
+    <title>Mamakanana's Shisanyama - Dashboard</title>
 
     <style>
-
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7f5;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f5;
             color: #222;
+        }
+
+        /* =========================
+           LOGIN SCREEN
+        ========================= */
+
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: #f5f7f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        .login-card {
+            width: 92%;
+            max-width: 430px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,.12);
+        }
+
+        .login-logo {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #08783e;
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #777;
+            margin: 8px 0 30px;
+        }
+
+        .login-field {
+            margin-bottom: 18px;
+        }
+
+        .login-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .login-field input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .login-field input:focus {
+            outline: none;
+            border-color: #08783e;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 7px;
+            background: #08783e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .login-button:hover {
+            background: #065f31;
+        }
+
+        .login-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .login-error {
+            color: #c41219;
+            text-align: center;
+            margin-top: 15px;
+            min-height: 20px;
         }
 
         /* =========================
@@ -35,52 +118,46 @@
         header {
             background: #08783e;
             color: white;
-            padding: 18px 25px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 18px 30px;
         }
 
-        .header-container {
+        .header-inner {
             max-width: 1400px;
             margin: auto;
-
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             gap: 20px;
         }
 
         .brand h1 {
-            font-size: 23px;
+            margin: 0;
+            font-size: 22px;
         }
 
-        .brand span {
-            color: #ff5555;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .brand p {
+            margin: 5px 0 0;
+            opacity: .85;
+            font-size: 13px;
         }
 
-        .header-buttons {
+        .header-actions {
             display: flex;
             gap: 10px;
         }
 
         .header-btn {
-            text-decoration: none;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-weight: bold;
+            border: 1px solid rgba(255,255,255,.5);
             background: transparent;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 6px;
+            text-decoration: none;
             cursor: pointer;
         }
 
         .header-btn:hover {
-            background: white;
-            color: #08783e;
+            background: rgba(255,255,255,.12);
         }
 
         /* =========================
@@ -90,16 +167,10 @@
         main {
             max-width: 1400px;
             margin: auto;
-            padding: 30px 20px;
-        }
-
-        .dashboard-title {
-            margin-bottom: 25px;
+            padding: 30px;
         }
 
         .dashboard-title h2 {
-            color: #08783e;
-            font-size: 30px;
             margin-bottom: 5px;
         }
 
@@ -108,50 +179,27 @@
         }
 
         /* =========================
-           STAT CARDS
+           STATS
         ========================= */
 
         .stats {
             display: grid;
-            grid-template-columns:
-                repeat(5, 1fr);
-
+            grid-template-columns: repeat(4, 1fr);
             gap: 18px;
-            margin-bottom: 30px;
+            margin: 25px 0;
         }
 
         .stat-card {
             background: white;
-            border-radius: 10px;
             padding: 22px;
-
-            box-shadow:
-                0 3px 15px
-                rgba(0,0,0,0.07);
-
-            border-left: 5px solid #08783e;
-        }
-
-        .stat-card.red {
-            border-left-color: #e51c23;
-        }
-
-        .stat-card.orange {
-            border-left-color: #f39c12;
-        }
-
-        .stat-card.blue {
-            border-left-color: #2980b9;
-        }
-
-        .stat-card.dark {
-            border-left-color: #444;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
         }
 
         .stat-card h3 {
+            font-size: 12px;
             color: #777;
-            font-size: 14px;
-            margin-bottom: 10px;
+            margin: 0 0 10px;
         }
 
         .stat-number {
@@ -161,183 +209,94 @@
         }
 
         /* =========================
-           TOOLBAR
+           CONTROLS
         ========================= */
 
-        .toolbar {
+        .controls {
             background: white;
             padding: 18px;
-
             border-radius: 10px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
             margin-bottom: 20px;
-
-            box-shadow:
-                0 3px 15px
-                rgba(0,0,0,0.06);
-        }
-
-        .filters {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        select,
-        input {
-            padding: 11px 13px;
+        .controls input,
+        .controls select {
+            padding: 11px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        select:focus,
-        input:focus {
-            border-color: #08783e;
         }
 
         .refresh-btn {
             background: #08783e;
             color: white;
-            border: none;
-
+            border: 0;
             padding: 11px 18px;
-
             border-radius: 6px;
-
-            font-weight: bold;
-
             cursor: pointer;
         }
 
-        .refresh-btn:hover {
-            background: #065c30;
-        }
-
         /* =========================
-           ORDERS
+           TABLE
         ========================= */
 
-        .orders-container {
+        .orders-section {
             background: white;
-
             border-radius: 10px;
-
-            box-shadow:
-                0 3px 15px
-                rgba(0,0,0,0.06);
-
-            overflow: hidden;
-        }
-
-        .orders-header {
-            padding: 20px;
-
-            border-bottom: 1px solid #eee;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .orders-header h3 {
-            color: #08783e;
-        }
-
-        .table-wrapper {
-            width: 100%;
             overflow-x: auto;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1050px;
+            min-width: 950px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
         }
 
         th {
-            background: #f1f7f3;
-
-            color: #315c46;
-
-            text-align: left;
-
-            padding: 14px;
-
-            font-size: 13px;
+            background: #f7f9f7;
+            font-size: 12px;
         }
 
         td {
-            padding: 14px;
-
-            border-bottom:
-                1px solid #eee;
-
             font-size: 14px;
         }
 
-        tr:hover {
-            background: #fafafa;
-        }
-
-        .order-number {
-            color: #08783e;
-            font-weight: bold;
-        }
-
-        .customer-name {
-            font-weight: bold;
-        }
-
-        .customer-phone {
-            color: #777;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* =========================
-           STATUS
-        ========================= */
-
         .status {
-            display: inline-block;
-
-            padding: 6px 10px;
-
+            padding: 5px 9px;
             border-radius: 20px;
-
-            font-size: 11px;
-
+            font-size: 12px;
             font-weight: bold;
-
-            text-transform: uppercase;
+            display: inline-block;
         }
 
         .status-new {
-            background: #e8f5ed;
+            background: #e4f7eb;
             color: #08783e;
         }
 
         .status-processing {
-            background: #fff3cd;
-            color: #946200;
+            background: #fff1d6;
+            color: #a66500;
         }
 
         .status-ready {
-            background: #e8f0ff;
-            color: #315fa8;
+            background: #e5f0ff;
+            color: #1769aa;
         }
 
         .status-completed {
-            background: #dff5e7;
-            color: #08783e;
+            background: #e8e8e8;
+            color: #444;
         }
 
         .status-cancelled {
@@ -345,70 +304,23 @@
             color: #c41219;
         }
 
-        /* =========================
-           ACTIONS
-        ========================= */
-
-        .actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
         .action-btn {
-            border: none;
-            padding: 7px 9px;
-
+            border: 0;
+            padding: 7px 10px;
             border-radius: 5px;
-
-            font-size: 11px;
-            font-weight: bold;
-
             cursor: pointer;
-        }
-
-        .process-btn {
-            background: #fff0c9;
-            color: #8a6200;
-        }
-
-        .ready-btn {
-            background: #e6efff;
-            color: #285ca8;
-        }
-
-        .complete-btn {
-            background: #dff5e7;
-            color: #08783e;
-        }
-
-        .cancel-btn {
-            background: #ffe5e5;
-            color: #c41219;
+            margin-right: 4px;
         }
 
         .view-btn {
-            background: #eeeeee;
-            color: #333;
+            background: #08783e;
+            color: white;
         }
-
-        .action-btn:hover {
-            opacity: 0.75;
-        }
-
-        /* =========================
-           EMPTY STATE
-        ========================= */
 
         .empty {
-            padding: 50px 20px;
             text-align: center;
-            color: #888;
-        }
-
-        .empty-icon {
-            font-size: 45px;
-            margin-bottom: 10px;
+            padding: 60px 20px;
+            color: #777;
         }
 
         /* =========================
@@ -417,558 +329,459 @@
 
         .modal {
             display: none;
-
             position: fixed;
-
             inset: 0;
-
-            background:
-                rgba(0,0,0,0.6);
-
-            z-index: 2000;
-
-            padding: 20px;
-
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
+            background: rgba(0,0,0,.55);
+            z-index: 5000;
+            padding: 30px;
+            overflow-y: auto;
         }
 
         .modal-content {
+            max-width: 700px;
+            margin: 40px auto;
             background: white;
-
-            width: 100%;
-            max-width: 650px;
-
-            max-height: 90vh;
-
-            overflow-y: auto;
-
             border-radius: 12px;
-
-            padding: 25px;
-
+            padding: 30px;
             position: relative;
         }
 
         .close-modal {
             position: absolute;
-
-            right: 18px;
+            right: 20px;
             top: 15px;
-
-            font-size: 25px;
-
+            font-size: 28px;
             cursor: pointer;
-
-            color: #777;
         }
 
         .modal-title {
+            margin-top: 0;
             color: #08783e;
-            margin-bottom: 20px;
-            padding-right: 30px;
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-
-            padding: 10px 0;
-
-            border-bottom:
-                1px solid #eee;
-
             gap: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
         }
 
         .detail-label {
-            color: #777;
-        }
-
-        .detail-value {
             font-weight: bold;
-            text-align: right;
         }
 
-        .items-title {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: #08783e;
+        .items-list {
+            margin-top: 20px;
         }
 
         .item-row {
             display: flex;
             justify-content: space-between;
-
-            padding: 10px;
-
-            background: #f7faf8;
-
-            margin-bottom: 5px;
-
-            border-radius: 5px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .modal-total {
-            margin-top: 15px;
-
-            display: flex;
-            justify-content: space-between;
-
-            font-size: 20px;
-
-            font-weight: bold;
-
-            color: #08783e;
-        }
-
-        /* =========================
-           LOADING
-        ========================= */
-
-        .loading {
-            padding: 40px;
-            text-align: center;
-            color: #08783e;
-            font-weight: bold;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 1100px) {
-
+        @media (max-width: 800px) {
             .stats {
-                grid-template-columns:
-                    repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
-        }
-
-        @media (max-width: 700px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(2, 1fr);
+            main {
+                padding: 18px;
             }
 
-            .header-container {
+            header {
+                padding: 15px;
+            }
+
+            .header-inner {
+                flex-direction: column;
                 align-items: flex-start;
             }
-
-            .brand h1 {
-                font-size: 18px;
-            }
-
-            .toolbar {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .filters {
-                flex-direction: column;
-            }
-
-            select,
-            input {
-                width: 100%;
-            }
-
         }
 
-        @media (max-width: 450px) {
-
+        @media (max-width: 500px) {
             .stats {
                 grid-template-columns: 1fr;
             }
 
-            main {
-                padding: 20px 10px;
+            .login-card {
+                padding: 25px;
             }
-
-            .header-buttons {
-                flex-direction: column;
-            }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
+<!-- =========================
+     LOGIN
+========================= -->
 
-    <!-- =========================
-         HEADER
-    ========================= -->
+<div id="loginScreen" class="login-screen">
 
-    <header>
+    <div class="login-card">
 
-        <div class="header-container">
-
-            <div class="brand">
-
-                <h1>
-                    Mamakanana's Shisanyama
-                </h1>
-
-                <span>
-                    ORDER MANAGEMENT
-                </span>
-
-            </div>
-
-
-            <div class="header-buttons">
-
-                <a
-                    href="index.html"
-                    class="header-btn"
-                >
-                    ← Website
-                </a>
-
-                <button
-                    class="header-btn"
-                    id="logoutBtn"
-                >
-                    Logout
-                </button>
-
-            </div>
-
+        <div class="login-logo">
+            🍖
         </div>
 
-    </header>
+        <h1>Mamakanana's Shisanyama</h1>
+
+        <p class="login-subtitle">
+            Staff Dashboard
+        </p>
+
+        <form id="loginForm">
+
+            <div class="login-field">
+                <label for="loginEmail">Email Address</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="login-field">
+                <label for="loginPassword">Password</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="login-button"
+            >
+                LOGIN
+            </button>
+
+            <div
+                id="loginError"
+                class="login-error"
+            ></div>
+
+        </form>
+
+    </div>
+
+</div>
 
 
-    <!-- =========================
-         MAIN
-    ========================= -->
+<!-- =========================
+     DASHBOARD
+========================= -->
 
-    <main>
+<header>
 
+    <div class="header-inner">
 
-        <div class="dashboard-title">
+        <div class="brand">
 
-            <h2>
-                Order Dashboard
-            </h2>
+            <h1>
+                Mamakanana's Shisanyama
+            </h1>
 
             <p>
-                Monitor and manage customer orders.
+                Staff Order Management
             </p>
 
         </div>
 
+        <div class="header-actions">
 
-        <!-- =========================
-             STATISTICS
-        ========================= -->
-
-        <section class="stats">
-
-
-            <div class="stat-card">
-
-                <h3>
-                    TOTAL ORDERS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="totalOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <h3>
-                    NEW ORDERS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="newOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card orange">
-
-                <h3>
-                    PROCESSING
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="processingOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card blue">
-
-                <h3>
-                    READY
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="readyOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card red">
-
-                <h3>
-                    CANCELLED
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="cancelledOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             FILTERS
-        ========================= -->
-
-        <section class="toolbar">
-
-
-            <div class="filters">
-
-                <select id="statusFilter">
-
-                    <option value="all">
-                        All Orders
-                    </option>
-
-                    <option value="new">
-                        New
-                    </option>
-
-                    <option value="processing">
-                        Processing
-                    </option>
-
-                    <option value="ready">
-                        Ready
-                    </option>
-
-                    <option value="completed">
-                        Completed
-                    </option>
-
-                    <option value="cancelled">
-                        Cancelled
-                    </option>
-
-                </select>
-
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search order number, name or phone..."
-                >
-
-            </div>
-
+            <a
+                href="index.html"
+                class="header-btn"
+            >
+                ← Website
+            </a>
 
             <button
-                class="refresh-btn"
-                id="refreshBtn"
+                id="logoutBtn"
+                class="header-btn"
             >
-                ↻ Refresh Orders
+                Logout
             </button>
-
-        </section>
-
-
-        <!-- =========================
-             ORDERS TABLE
-        ========================= -->
-
-        <section class="orders-container">
-
-
-            <div class="orders-header">
-
-                <h3>
-                    Customer Orders
-                </h3>
-
-                <span id="lastUpdated">
-                    Loading...
-                </span>
-
-            </div>
-
-
-            <div
-                id="loading"
-                class="loading"
-            >
-                Loading orders...
-            </div>
-
-
-            <div
-                class="table-wrapper"
-                id="tableWrapper"
-                style="display:none;"
-            >
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Order
-                            </th>
-
-                            <th>
-                                Customer
-                            </th>
-
-                            <th>
-                                Type
-                            </th>
-
-                            <th>
-                                Total
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Payment
-                            </th>
-
-                            <th>
-                                Date
-                            </th>
-
-                            <th>
-                                Actions
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody
-                        id="ordersTable"
-                    >
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <div
-                id="emptyState"
-                class="empty"
-                style="display:none;"
-            >
-
-                <div class="empty-icon">
-                    📋
-                </div>
-
-                <h3>
-                    No Orders Found
-                </h3>
-
-                <p>
-                    Customer orders will appear here.
-                </p>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- =========================
-         ORDER DETAILS MODAL
-    ========================= -->
-
-    <div
-        class="modal"
-        id="orderModal"
-    >
-
-        <div class="modal-content">
-
-            <div
-                class="close-modal"
-                id="closeModal"
-            >
-                ×
-            </div>
-
-            <h2
-                class="modal-title"
-                id="modalTitle"
-            >
-                Order Details
-            </h2>
-
-
-            <div id="orderDetails">
-            </div>
 
         </div>
 
     </div>
 
+</header>
 
-    <!-- SUPABASE -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<main>
 
-    <!-- DASHBOARD JAVASCRIPT -->
+    <div class="dashboard-title">
 
-    <script src="dashboard.js"></script>
+        <h2>
+            Order Dashboard
+        </h2>
+
+        <p>
+            Monitor and manage customer orders.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <h3>
+                TOTAL ORDERS
+            </h3>
+
+            <div
+                class="stat-number"
+                id="totalOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                NEW ORDERS
+            </h3>
+
+            <div
+                class="stat-number"
+                id="newOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                PROCESSING
+            </h3>
+
+            <div
+                class="stat-number"
+                id="processingOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                COMPLETED
+            </h3>
+
+            <div
+                class="stat-number"
+                id="completedOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CONTROLS
+    ========================= -->
+
+    <div class="controls">
+
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Search orders..."
+        >
+
+        <select id="statusFilter">
+
+            <option value="all">
+                All Statuses
+            </option>
+
+            <option value="new">
+                New
+            </option>
+
+            <option value="processing">
+                Processing
+            </option>
+
+            <option value="ready">
+                Ready
+            </option>
+
+            <option value="completed">
+                Completed
+            </option>
+
+            <option value="cancelled">
+                Cancelled
+            </option>
+
+        </select>
+
+
+        <button
+            id="refreshBtn"
+            class="refresh-btn"
+        >
+            Refresh
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         ORDERS
+    ========================= -->
+
+    <section class="orders-section">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Order #
+                    </th>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Payment
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="ordersTable">
+            </tbody>
+
+        </table>
+
+
+        <div
+            id="emptyState"
+            class="empty"
+            style="display:none;"
+        >
+
+            <div class="empty-icon">
+                📋
+            </div>
+
+            <h3>
+                No Orders Found
+            </h3>
+
+            <p>
+                Customer orders will appear here.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     ORDER MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="orderModal"
+>
+
+    <div class="modal-content">
+
+        <div
+            class="close-modal"
+            id="closeModal"
+        >
+            ×
+        </div>
+
+        <h2
+            class="modal-title"
+            id="modalTitle"
+        >
+            Order Details
+        </h2>
+
+        <div id="orderDetails">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- DASHBOARD -->
+
+<script src="dashboard.js"></script>
 
 </body>
-
 </html>
