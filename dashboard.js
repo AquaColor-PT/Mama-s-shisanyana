@@ -420,7 +420,7 @@ logoutBtn.addEventListener(
 
 async function loadOrders() {
 
-    if (!isAuthenticatedStaff) {
+    if (!isAuthenticatedStaff){
 
         console.warn(
             "Not authenticated. Orders will not be loaded."
@@ -631,15 +631,32 @@ function renderOrders(
                     R${total}
                 </td>
 
-                <td>
-                    <span class="status ${statusClass}">
-                        ${escapeHtml(
-                            capitalize(
-                                order.status || "-"
-                            )
-                        )}
-                    </span>
-                </td>
+          <td>
+    <select
+        class="status-select ${statusClass}"
+        onchange="updateOrderStatus('${order.id}', this.value)"
+    >
+        <option value="new" ${order.status === "new" ? "selected" : ""}>
+            New
+        </option>
+
+        <option value="processing" ${order.status === "processing" ? "selected" : ""}>
+            Processing
+        </option>
+
+        <option value="ready" ${order.status === "ready" ? "selected" : ""}>
+            Ready
+        </option>
+
+        <option value="completed" ${order.status === "completed" ? "selected" : ""}>
+            Completed
+        </option>
+
+        <option value="cancelled" ${order.status === "cancelled" ? "selected" : ""}>
+            Cancelled
+        </option>
+    </select>
+</td>
 
                 <td>
                     ${escapeHtml(
@@ -675,7 +692,161 @@ function renderOrders(
     );
 
 }
+// =====================================================
+// UPDATE ORDER STATUS
+// =====================================================
 
+window.updateOrderStatus = async function(orderId, newStatus) {
+
+    if (!isAuthenticatedStaff) {
+        alert("You are not logged in.");
+        return;
+    }
+
+    const order = allOrders.find(
+        item => item.id === orderId
+    );
+
+    if (!order) {
+        return;
+    }
+
+    const oldStatus = order.status;
+
+    // Don't do anything if unchanged
+    if (oldStatus === newStatus) {
+        return;
+    }
+
+    // Ask confirmation before cancelling
+    if (newStatus === "cancelled") {
+
+        const confirmed = confirm(
+            `Are you sure you want to cancel Order #${order.order_number}?`
+        );
+
+        if (!confirmed) {
+            renderOrders(allOrders);
+            return;
+        }
+    }
+
+    try {
+
+        const updateData = {
+            status: newStatus
+        };
+
+        // Record cancellation information
+        if (newStatus === "cancelled") {
+
+            updateData.cancelled_at =
+                new Date().toISOString();
+
+            const {
+                data: {
+                    user
+                }
+            } = await supabaseClient.auth.getUser();
+
+            updateData.cancelled_by =
+                user ? user.id : null;
+
+            const reason = prompt(
+                "Enter cancellation reason:"
+            );
+
+            if (!reason || !reason.trim()) {
+
+                alert(
+                    "Cancellation reason is required."
+                );
+
+                renderOrders(allOrders);
+
+                return;
+            }
+
+            updateData.cancellation_reason =
+                reason.trim();
+        }
+
+        // If moving away from cancelled,
+        // clear cancellation information
+        if (
+            oldStatus === "cancelled" &&
+            newStatus !== "cancelled"
+        ) {
+
+            updateData.cancelled_at = null;
+            updateData.cancelled_by = null;
+            updateData.cancellation_reason = null;
+        }
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("orders")
+            .update(updateData)
+            .eq("id", orderId)
+            .select()
+            .single();
+
+        if (error) {
+
+            console.error(
+                "Status update error:",
+                error
+            );
+
+            alert(
+                "Could not update the order:\n\n" +
+                error.message
+            );
+
+            renderOrders(allOrders);
+
+            return;
+        }
+
+        console.log(
+            "Order status updated:",
+            data
+        );
+
+        // Update local order
+        const index =
+            allOrders.findIndex(
+                item => item.id === orderId
+            );
+
+        if (index !== -1) {
+
+            allOrders[index] = {
+                ...allOrders[index],
+                ...data
+            };
+        }
+
+        updateStatistics(allOrders);
+
+        applyFilters();
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected status error:",
+            error
+        );
+
+        alert(
+            "Something went wrong while updating the order."
+        );
+
+        renderOrders(allOrders);
+    }
+};
 
 // =====================================================
 // VIEW ORDER
