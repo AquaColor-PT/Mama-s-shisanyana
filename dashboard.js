@@ -454,7 +454,7 @@ async function loadOrders() {
             .order(
                 "created_at",
                 {
-                    ascending: false
+                    ascending: true
                 }
             );
 
